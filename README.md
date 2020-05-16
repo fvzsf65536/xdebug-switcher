@@ -1,1 +1,1 @@
-xloop='sudo ~/path/to/loop.php'
+alias xloop='sudo ~/path/to/loop.php'
