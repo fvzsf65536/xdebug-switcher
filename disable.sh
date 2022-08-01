@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
-echo "disable" > command
+
+# https://stackoverflow.com/questions/4774054/reliable-way-for-a-bash-script-to-get-the-full-path-to-itself
+
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+echo "disable" > $SCRIPTPATH/command

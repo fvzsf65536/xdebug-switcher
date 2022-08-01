@@ -5,4 +5,4 @@
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-echo "enable" > $SCRIPTPATH/command
+echo "toggle" > $SCRIPTPATH/command

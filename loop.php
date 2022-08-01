@@ -34,6 +34,10 @@ class Loop
                 if ($command == 'enable') {
                     $this->enable();
                 }
+
+                if ($command == 'toggle') {
+                    $this->toggle();
+                }
             }
 
             sleep(1);
@@ -42,8 +46,8 @@ class Loop
 
     private function disable()
     {
-        exec('sudo cp data/disabled.ini /etc/php/7.0/mods-available/xdebug.ini');
         exec('sudo cp data/disabled.ini /etc/php/7.3/mods-available/xdebug.ini');
+        passthru('ffplay -nodisp -autoexit data/sounds/disable.mp3 > /dev/null 2>&1');
 
         $this->restartServices();
 
@@ -52,17 +56,30 @@ class Loop
 
     private function enable()
     {
-        exec('sudo cp data/enabled.ini /etc/php/7.0/mods-available/xdebug.ini');
         exec('sudo cp data/enabled.ini /etc/php/7.3/mods-available/xdebug.ini');
+        passthru('ffplay -nodisp -autoexit data/sounds/enable.mp3 > /dev/null 2>&1');
 
         $this->restartServices();
 
         print date('d.m.Y H:i:s') . ' enabled' . PHP_EOL;
     }
 
+    private function isEnabled()
+    {
+        return file_get_contents('/etc/php/7.3/mods-available/xdebug.ini') == file_get_contents('data/enabled.ini');
+    }
+
+    private function toggle()
+    {
+        if ($this->isEnabled()) {
+            $this->disable();
+        } else {
+            $this->enable();
+        }
+    }
+
     private function restartServices()
     {
-        exec('sudo systemctl restart apache2');
         exec('sudo systemctl restart php7.3-fpm');
     }
 }
